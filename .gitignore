@@ -5,7 +5,7 @@
 .vscode/
 
 # api key file
-
+EnvironmentVariables.cs
 apikey*
 
 # Database configuration
