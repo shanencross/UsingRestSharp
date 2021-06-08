@@ -1,36 +1,26 @@
 using System;
-using System.Threading.Tasks;
-using RestSharp;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 
-namespace UsingRestSharp {
-  public class Program {
-    static void Main() {
-      var apiCallTask = ApiHelper.ApiCall("[YOUR-API-KEY]");
-      var result = apiCallTask.Result;
-      // Console.WriteLine(result);
-      JObject jsonResponse = JsonConvert.DeserializeObject<JObject>(result);
-      // Console.WriteLine(jsonResponse["results"]);
-      List<Article> articleList = JsonConvert.DeserializeObject<List<Article>>(jsonResponse["results"].ToString());
+namespace UsingRestSharp
+{
+    public class Program
+    {
+        public static void Main(string[] args)
+        {
+            CreateHostBuilder(args).Build().Run();
+        }
 
-      foreach (Article article in articleList) {
-        Console.WriteLine($"Section: {article.Section}");
-        Console.WriteLine($"Title: {article.Title}");
-        Console.WriteLine($"Abstract: {article.Abstract}");
-        Console.WriteLine($"Url: {article.Url}");
-        Console.WriteLine($"Byline: {article.Byline}");
-      }
+        public static IHostBuilder CreateHostBuilder(string[] args) =>
+            Host.CreateDefaultBuilder(args)
+                .ConfigureWebHostDefaults(webBuilder =>
+                {
+                    webBuilder.UseStartup<Startup>();
+                });
     }
-
-    class ApiHelper {
-      public static async Task<string> ApiCall(string apiKey) {
-        RestClient client = new RestClient("https://api.nytimes.com/svc/topstories/v2");
-        RestRequest request = new RestRequest($"home.json?api-key={apiKey}", Method.GET);
-        var response = await client.ExecuteTaskAsync(request);
-        return response.Content;
-      }
-    }
-  }
 }
