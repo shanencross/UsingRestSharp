@@ -10,5 +10,10 @@ namespace UsingRestSharp.Controllers
             var allArticles = Article.GetArticles("[YOUR-API-KEY-HERE]");
             return View(allArticles);
         }
+        
+        public IActionResult Privacy()
+        {
+            return View();
+        }
     }
 }
